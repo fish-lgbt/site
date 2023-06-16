@@ -1,13 +1,45 @@
+# Serve only on port 80
 :80 {
-    root * var/www/html
+    # Where the php files are
+    root * /var/www/html
+
+    # Start static file server
     file_server
+
+    # Compress everything
     encode zstd gzip
+    
+    # MyBB
     php_fastcgi mybb:9000
 
+    # Stip the php version, etc.
+    header -x-powered-by 
+
+    # Always use HTTPs
+    header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+
+    # Don't allow other sites to embed this site
+    # This prevents clickjacking
+    header X-Frame-Options "SAMEORIGIN"
+
+    # Forces browser to use provided content-type
+    header X-Content-Type-Options "nosniff"
+
+    # When sending users to another site only send the domain of our site as the referrer
+    header Referrer-Policy "origin"
+
+    # Disable all the features we don't use
+    header Permissions-Policy "accelerometer=(),ambient-light-sensor=(),autoplay=(),battery=(),camera=(),clipboard-read=(),clipboard-write=(),conversion-measurement=(),cross-origin-isolated=(),display-capture=(),document-domain=(),encrypted-media=(),execution-while-not-rendered=(),execution-while-out-of-viewport=(),focus-without-user-activation=(),fullscreen=(),gamepad=(),geolocation=(),gyroscope=(),hid=(),idle-detection=(),interest-cohort=(),magnetometer=(),microphone=(),midi=(),navigation-override=(),payment=(),picture-in-picture=(),publickey-credentials-get=(),screen-wake-lock=(),serial=(),speaker-selection=(),sync-script=(),sync-xhr=(),trust-token-redemption=(),usb=(),vertical-scroll=(),wake-lock=(),web-share=(),window-placement=(),xr-spatial-tracking=()"
+
+    # Allow any file to be loaded as long as it's over https
+    header Content-Security-Policy "default-src https:"
+
+    # Dont serve files that're only meant to be included
     @inc {
         path /inc/*
     }
     respond @inc 403
 
+    # Write to access logs
     log
 }
