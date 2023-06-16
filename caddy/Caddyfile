@@ -1,0 +1,13 @@
+:80 {
+    root * var/www/html
+    file_server
+    encode zstd gzip
+    php_fastcgi mybb:9000
+
+    @inc {
+        path /inc/*
+    }
+    respond @inc 403
+
+    log
+}

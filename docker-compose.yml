@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  caddy:
+    image: caddy/caddy:latest
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ${PWD}/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ${PWD}/mybb:/var/www/html:r
+
+  mybb:
+    image: mybb/mybb:latest
+    volumes:
+      - ${PWD}/mybb:/var/www/html:rw
+
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+    volumes:
+      - ${PWD}/mysql/data:/var/lib/mysql:rw
