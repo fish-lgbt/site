@@ -298,14 +298,7 @@ function parse_page($contents)
 	$contents = str_replace('<navigation>', build_breadcrumb(), $contents);
 	$contents = str_replace('<archive_url>', $archive_url, $contents);
 
-	if($htmldoctype)
-	{
-		$contents = $htmldoctype.$contents;
-	}
-	else
-	{
-		$contents = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n".$contents;
-	}
+	$contents = "<!DOCTYPE html>".$contents;
 
 	$contents = str_replace("<html", "<html xmlns=\"http://www.w3.org/1999/xhtml\"", $contents);
 
