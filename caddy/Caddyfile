@@ -8,12 +8,12 @@
 
     # Compress everything
     encode zstd gzip
-    
-    # MyBB
+
+    # Reverse proxy to MyBB
     php_fastcgi mybb:9000
 
     # Stip the php version, etc.
-    header -x-powered-by 
+    header -x-powered-by
 
     # Always use HTTPs
     header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
@@ -26,7 +26,7 @@
     header X-Content-Type-Options "nosniff"
 
     # When sending users to another site only send the domain of our site as the referrer
-    header Referrer-Policy "origin"
+    header Referrer-Policy "strict-origin-when-cross-origin"
 
     # Disable all the features we don't use
     header Permissions-Policy "accelerometer=(),ambient-light-sensor=(),autoplay=(),battery=(),camera=(),clipboard-read=(),clipboard-write=(),conversion-measurement=(),cross-origin-isolated=(),display-capture=(),document-domain=(),encrypted-media=(),execution-while-not-rendered=(),execution-while-out-of-viewport=(),focus-without-user-activation=(),fullscreen=(),gamepad=(),geolocation=(),gyroscope=(),hid=(),idle-detection=(),interest-cohort=(),magnetometer=(),microphone=(),midi=(),navigation-override=(),payment=(),picture-in-picture=(),publickey-credentials-get=(),screen-wake-lock=(),serial=(),speaker-selection=(),sync-script=(),sync-xhr=(),trust-token-redemption=(),usb=(),vertical-scroll=(),wake-lock=(),web-share=(),window-placement=(),xr-spatial-tracking=()"
